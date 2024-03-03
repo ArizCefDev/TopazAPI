@@ -1,3 +1,7 @@
+using AutoMapper;
+using Business.Abstract;
+using Business.Concrete;
+using Business.Config;
 using DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +19,15 @@ builder.Services.AddDbContext<AppDBContext>(opt =>
 opt.UseSqlServer(builder.Configuration.GetConnectionString("DataConnection"))
 );
 
+//AutoMapper
+var mappingConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MapperProfile());
+});
+builder.Services.AddSingleton(mappingConfig.CreateMapper());
+
+//Services
+builder.Services.AddScoped<IScoreService, ScoreService>();
 
 var app = builder.Build();
 
